@@ -1,0 +1,125 @@
+body{
+    background-color: #12181f;
+}
+header{
+    background-color: #32e6e2;
+    text-align: center;
+    color:#014847;
+    position:relative;
+    font-size: 25px;
+    font-weight: 700;
+    padding:0.5rem;
+    margin-bottom: 12px;
+}
+header:hover{
+    background-color: #8efbf7;
+}
+#navbar{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+#child1{
+    margin:8px;
+}
+.child2 a{
+    color: #ffffff;
+    text-decoration:none;
+    font-weight: 900;
+    padding:8px;
+    font-size:25px;
+    position:relative;
+    display: inline-block;
+}
+.child2 a:hover{
+    transform: scale(1.1);
+    color:rgb(140, 14, 14);
+}
+#child2{
+    margin-top: 12px;
+}
+#child3{
+    margin:8px;
+}
+.btn{
+    border: 2px solid #12181f;
+    border-radius: 18%;
+    width:70px;
+    line-height: 30px;
+    margin:4px;
+    font-weight: 700;
+}
+#btn1,.btn_primary{
+    background-color: #32e6e2;
+}
+#btn2,.btn_secondary{
+    background-color: rgb(12, 235, 12);
+}
+.btn:hover,.btn_primary:hover,.btn_secondary:hover{
+    transform: scale(1.08);
+    box-shadow: 0 0 10px currentColor;
+}
+
+#hero{
+    display:flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+h1,p{
+    color: #ffffff;
+    font-family: Instrument Arial, Helvetica, sans-serif;
+}
+h1{
+    font-weight: 850;
+    font-size: 50px;
+    max-width: 450px;
+}
+p{
+    font-weight: 400;
+    font-size: 20px;
+    max-width: 450px; 
+}
+iframe{
+    width:500px ;
+    height:320px ;
+    border:none; 
+    background:transparent;
+}
+.hero_buttons{
+    max-width: 360px;
+    display: flex;
+    justify-content: center;
+}
+.btn_primary,.btn_secondary{
+    border: 2px solid #12181f;
+    border-radius:360px;
+    height:40px;
+    line-height: 40px;
+    margin:4px;
+    font-weight: 600;
+    width: 100px; 
+}
+hr{
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+footer{
+    background-color: rgb(9,31,44);
+    margin: 2px;
+    padding-bottom: 6px;
+}
+#foot{
+    display: flex;
+    justify-content: space-around;
+}
+.foot_child h3{
+    display:inline-block;
+    color:#ffffff;
+    padding-right:16px;
+}
+footer p{
+    text-align: center;
+    max-width: 100%;
+}
+
+
