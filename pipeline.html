@@ -1,511 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeline Status - CI/CD Pipeline</title>
+    <title>CI/CD Pipeline - Pipeline</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .pipeline-run {
-            background: var(--card-bg, #1a1a2e);
-            border-radius: 10px;
-            padding: 1.2rem 1.5rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid #32e6e2;
-        }
-
-        .pipeline-run.failed {
-            border-left-color: #ff4d4d;
-        }
-
-        .pipeline-run.running {
-            border-left-color: #ffa500;
-        }
-
-        .pipeline-run.success {
-            border-left-color: #0ceb0c;
-        }
-
-        .pipeline-run-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .pipeline-run-title {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .pipeline-run-meta {
-            font-size: 0.82rem;
-            color: #aaa;
-            margin-top: 0.3rem;
-        }
-
-        .stages {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            flex-wrap: wrap;
-            margin-top: 0.9rem;
-        }
-
-        .stage {
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-
-        .stage-box {
-            padding: 0.35rem 0.85rem;
-            border-radius: 5px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .stage-box.pass {
-            background: rgba(12, 235, 12, 0.15);
-            color: #0ceb0c;
-            border: 1px solid #0ceb0c55;
-        }
-
-        .stage-box.fail {
-            background: rgba(255, 77, 77, 0.15);
-            color: #ff4d4d;
-            border: 1px solid #ff4d4d55;
-        }
-
-        .stage-box.running {
-            background: rgba(255, 165, 0, 0.15);
-            color: #ffa500;
-            border: 1px solid #ffa50055;
-        }
-
-        .stage-box.skipped {
-            background: rgba(170, 170, 170, 0.1);
-            color: #aaa;
-            border: 1px solid #aaa3;
-        }
-
-        .stage-arrow {
-            color: #555;
-            font-size: 1rem;
-            padding: 0 4px;
-        }
-
-        .metrics-row {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .metric-chip {
-            background: rgba(50, 230, 226, 0.08);
-            border: 1px solid rgba(50, 230, 226, 0.2);
-            border-radius: 20px;
-            padding: 0.25rem 0.75rem;
-            font-size: 0.8rem;
-            color: #ccc;
-        }
-
-        .metric-chip span {
-            color: #32e6e2;
-            font-weight: 600;
-        }
-
-        .trend-up {
-            color: #0ceb0c;
-            font-size: 0.82rem;
-        }
-
-        .trend-down {
-            color: #ff4d4d;
-            font-size: 0.82rem;
-        }
-
-        .branch-tag {
-            background: rgba(100, 100, 255, 0.15);
-            color: #9999ff;
-            border: 1px solid rgba(100, 100, 255, 0.3);
-            border-radius: 4px;
-            padding: 0.15rem 0.5rem;
-            font-size: 0.75rem;
-            font-family: monospace;
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
-
 <body>
-    <header>Dev Ops CI/CD Pipeline</header>
-    <nav id="navbar-child">
-        <div id="child1">
-            <img width="100" src="https://raw.githubusercontent.com/defxharsh/logo_link/main/image%20(1).png"
-                alt="Logo">
-        </div>
-        <div id="child2" class="child2">
-            <a href="index.html">Home</a>
-            <a href="build.html">Build</a>
-            <a href="deploy.html">Deploy</a>
-            <a href="pipeline.html">Pipeline</a>
-            <a href="health.html">Health</a>
-        </div>
-    </nav>
 
-    <div class="container">
-        <h1 class="page-heading">Pipeline Status</h1>
-        <p class="page-sub">Track recent pipeline runs, stage-by-stage progress, and execution metrics across all branches.</p>
+<header>Dev Ops CI/CD Pipeline</header>
 
-        <!-- Summary Metric Cards -->
-        <div class="grid">
-            <div class="card">
-                <div class="card-title">
-                    Total Runs (30d)
-                    <span class="status-pill status-success">Active</span>
-                </div>
-                <div class="stat-value">284</div>
-                <div class="stat-label">Pipeline executions</div>
-                <p class="trend-up">↑ 12% vs last month</p>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    Success Rate
-                    <span class="status-pill status-success">Healthy</span>
-                </div>
-                <div class="stat-value">94.3%</div>
-                <div class="stat-label">Passed / Total runs</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 94.3%;"></div>
-                </div>
-                <p class="trend-up">↑ 2.1% vs last month</p>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    Avg Duration
-                    <span class="status-pill status-success">Normal</span>
-                </div>
-                <div class="stat-value">6m 42s</div>
-                <div class="stat-label">Per full pipeline run</div>
-                <p class="trend-up">↓ 18s faster vs last month</p>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    Failed Runs (30d)
-                    <span class="status-pill status-warning">Monitor</span>
-                </div>
-                <div class="stat-value">16</div>
-                <div class="stat-label">Requires investigation</div>
-                <p class="trend-down">↑ 3 more vs last month</p>
-            </div>
-        </div>
-
-        <!-- Stage-level breakdown -->
-        <h2 style="color: #32e6e2; margin-top: 3rem;">Stage Failure Breakdown</h2>
-        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
-            <div class="card" style="text-align:center;">
-                <div class="stat-value" style="font-size:1.8rem;">0.7%</div>
-                <div class="stat-label">Source Checkout</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="stat-value" style="font-size:1.8rem;">1.4%</div>
-                <div class="stat-label">Dependency Install</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="stat-value" style="font-size:1.8rem;">2.8%</div>
-                <div class="stat-label">Build</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="stat-value" style="font-size:1.8rem; color:#ffa500;">4.1%</div>
-                <div class="stat-label">Unit Tests</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="stat-value" style="font-size:1.8rem;">1.2%</div>
-                <div class="stat-label">Security Scan</div>
-            </div>
-            <div class="card" style="text-align:center;">
-                <div class="stat-value" style="font-size:1.8rem;">0.5%</div>
-                <div class="stat-label">Deploy</div>
-            </div>
-        </div>
-
-        <!-- Recent Pipeline Runs -->
-        <h2 style="color: #32e6e2; margin-top: 3rem;">Recent Pipeline Runs</h2>
-
-        <!-- Run 1 - Running -->
-        <div class="pipeline-run running">
-            <div class="pipeline-run-header">
-                <div>
-                    <div class="pipeline-run-title">#1047 &nbsp; <span class="branch-tag">feat/auth-refactor</span>
-                    </div>
-                    <div class="pipeline-run-meta">Triggered by harshdev · 8 minutes ago · Commit
-                        <code>3f9a1b2</code></div>
-                </div>
-                <span class="status-pill status-warning">Running</span>
-            </div>
-            <div class="stages">
-                <div class="stage">
-                    <div class="stage-box pass">✓ Checkout</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Install</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Build</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box running">⟳ Unit Tests</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box skipped">Security Scan</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box skipped">Deploy</div>
-                </div>
-            </div>
-            <div class="metrics-row">
-                <div class="metric-chip">Duration so far: <span>3m 21s</span></div>
-                <div class="metric-chip">Environment: <span>Staging</span></div>
-                <div class="metric-chip">Tests passed: <span>148 / ?</span></div>
-            </div>
-        </div>
-
-        <!-- Run 2 - Success -->
-        <div class="pipeline-run success">
-            <div class="pipeline-run-header">
-                <div>
-                    <div class="pipeline-run-title">#1046 &nbsp; <span class="branch-tag">main</span></div>
-                    <div class="pipeline-run-meta">Triggered by CI bot · 2 hours ago · Commit <code>a1c4e88</code></div>
-                </div>
-                <span class="status-pill status-success">Passed</span>
-            </div>
-            <div class="stages">
-                <div class="stage">
-                    <div class="stage-box pass">✓ Checkout</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Install</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Build</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Unit Tests</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Security Scan</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Deploy</div>
-                </div>
-            </div>
-            <div class="metrics-row">
-                <div class="metric-chip">Duration: <span>6m 14s</span></div>
-                <div class="metric-chip">Environment: <span>Production</span></div>
-                <div class="metric-chip">Tests passed: <span>312 / 312</span></div>
-                <div class="metric-chip">Coverage: <span>87.4%</span></div>
-            </div>
-        </div>
-
-        <!-- Run 3 - Failed -->
-        <div class="pipeline-run failed">
-            <div class="pipeline-run-header">
-                <div>
-                    <div class="pipeline-run-title">#1045 &nbsp; <span class="branch-tag">feat/payment-v2</span></div>
-                    <div class="pipeline-run-meta">Triggered by patelrohan · 5 hours ago · Commit <code>d8b72f1</code>
-                    </div>
-                </div>
-                <span class="status-pill status-error">Failed</span>
-            </div>
-            <div class="stages">
-                <div class="stage">
-                    <div class="stage-box pass">✓ Checkout</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Install</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Build</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box fail">✗ Unit Tests</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box skipped">Security Scan</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box skipped">Deploy</div>
-                </div>
-            </div>
-            <div class="metrics-row">
-                <div class="metric-chip">Duration: <span>4m 03s</span></div>
-                <div class="metric-chip">Environment: <span>Staging</span></div>
-                <div class="metric-chip">Tests failed: <span>7 / 289</span></div>
-                <div class="metric-chip">Failed at: <span>Unit Tests</span></div>
-            </div>
-        </div>
-
-        <!-- Run 4 - Success -->
-        <div class="pipeline-run success">
-            <div class="pipeline-run-header">
-                <div>
-                    <div class="pipeline-run-title">#1044 &nbsp; <span class="branch-tag">main</span></div>
-                    <div class="pipeline-run-meta">Triggered by CI bot · 8 hours ago · Commit <code>b3d19cc</code></div>
-                </div>
-                <span class="status-pill status-success">Passed</span>
-            </div>
-            <div class="stages">
-                <div class="stage">
-                    <div class="stage-box pass">✓ Checkout</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Install</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Build</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Unit Tests</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Security Scan</div>
-                    <span class="stage-arrow">→</span>
-                </div>
-                <div class="stage">
-                    <div class="stage-box pass">✓ Deploy</div>
-                </div>
-            </div>
-            <div class="metrics-row">
-                <div class="metric-chip">Duration: <span>6m 58s</span></div>
-                <div class="metric-chip">Environment: <span>Production</span></div>
-                <div class="metric-chip">Tests passed: <span>312 / 312</span></div>
-                <div class="metric-chip">Coverage: <span>86.9%</span></div>
-            </div>
-        </div>
-
-        <!-- Full history table -->
-        <h2 style="color: #32e6e2; margin-top: 3rem;">Pipeline History</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Run</th>
-                    <th>Branch</th>
-                    <th>Triggered By</th>
-                    <th>Status</th>
-                    <th>Duration</th>
-                    <th>Failed Stage</th>
-                    <th>Timestamp</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>#1047</td>
-                    <td><span class="branch-tag">feat/auth-refactor</span></td>
-                    <td>harshdev</td>
-                    <td><span class="status-pill status-warning">Running</span></td>
-                    <td>3m 21s+</td>
-                    <td>—</td>
-                    <td>2026-02-21 15:22</td>
-                </tr>
-                <tr>
-                    <td>#1046</td>
-                    <td><span class="branch-tag">main</span></td>
-                    <td>CI bot</td>
-                    <td><span class="status-pill status-success">Passed</span></td>
-                    <td>6m 14s</td>
-                    <td>—</td>
-                    <td>2026-02-21 13:30</td>
-                </tr>
-                <tr>
-                    <td>#1045</td>
-                    <td><span class="branch-tag">feat/payment-v2</span></td>
-                    <td>patelrohan</td>
-                    <td><span class="status-pill status-error">Failed</span></td>
-                    <td>4m 03s</td>
-                    <td>Unit Tests</td>
-                    <td>2026-02-21 10:15</td>
-                </tr>
-                <tr>
-                    <td>#1044</td>
-                    <td><span class="branch-tag">main</span></td>
-                    <td>CI bot</td>
-                    <td><span class="status-pill status-success">Passed</span></td>
-                    <td>6m 58s</td>
-                    <td>—</td>
-                    <td>2026-02-21 07:45</td>
-                </tr>
-                <tr>
-                    <td>#1043</td>
-                    <td><span class="branch-tag">fix/null-ptr</span></td>
-                    <td>meghanaS</td>
-                    <td><span class="status-pill status-success">Passed</span></td>
-                    <td>5m 39s</td>
-                    <td>—</td>
-                    <td>2026-02-20 22:10</td>
-                </tr>
-                <tr>
-                    <td>#1042</td>
-                    <td><span class="branch-tag">feat/payment-v2</span></td>
-                    <td>patelrohan</td>
-                    <td><span class="status-pill status-error">Failed</span></td>
-                    <td>3m 17s</td>
-                    <td>Build</td>
-                    <td>2026-02-20 19:55</td>
-                </tr>
-                <tr>
-                    <td>#1041</td>
-                    <td><span class="branch-tag">main</span></td>
-                    <td>CI bot</td>
-                    <td><span class="status-pill status-success">Passed</span></td>
-                    <td>6m 22s</td>
-                    <td>—</td>
-                    <td>2026-02-20 14:30</td>
-                </tr>
-            </tbody>
-        </table>
+<nav id="navbar-child">
+    <div id="child1">
+        <img width="100" src="https://raw.githubusercontent.com/defxharsh/logo_link/main/image%20(1).png" alt="logo">
     </div>
+    <div id="child2" class="child2">
+        <a href="index.html">Home</a>
+        <a href="build.html">Build</a>
+        <a href="deploy.html">Deploy</a>
+        <a href="pipeline.html">Pipeline</a>
+        <a href="health.html">Health</a>
+    </div>
+</nav>
 
-    <footer>
-        <div id="foot">
-            <div id="foot1" class="foot_child">
-                <h3>English(United States)</h3>
-                <h3>Your Privacy Choice</h3>
+<h1 class="page-heading">Pipeline Status</h1>
+<p class="page-sub">Track recent pipeline runs, stage-by-stage progress, and execution metrics across all branches</p>
+
+<!-- KPI STAT CARDS -->
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-number teal">284</div>
+        <div class="stat-label">Total Runs (30d)</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number green">94.3%</div>
+        <div class="stat-label">Success Rate</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number red">16</div>
+        <div class="stat-label">Failed Runs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number yellow">1</div>
+        <div class="stat-label">Running Now</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number teal">6m 42s</div>
+        <div class="stat-label">Avg Duration</div>
+    </div>
+</div>
+
+<!-- CHARTS ROW -->
+<div class="charts-row">
+    <div class="chart-card">
+        <div class="chart-title">Run Outcomes</div>
+        <div class="chart-box small">
+            <canvas id="donutChart"></canvas>
+        </div>
+    </div>
+    <div class="chart-card">
+        <div class="chart-title">Stage Failure Rate (%)</div>
+        <div class="chart-box large">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- THREE TOGGLE BUTTONS -->
+<div class="pipeline-toggle-row">
+    <button class="toggle-btn" onclick="togglePanel('stagePanel', this, '&#11015; Stage Breakdown', '&#11014; Stage Breakdown')">
+        &#11015; Stage Breakdown
+    </button>
+    <button class="toggle-btn toggle-btn-runs" onclick="togglePanel('runsPanel', this, '&#11015; Pipeline Runs', '&#11014; Pipeline Runs')">
+        &#11015; Pipeline Runs <span class="run-badge running-badge">1 Live</span>
+    </button>
+    <button class="toggle-btn toggle-btn-history" onclick="togglePanel('historyPanel', this, '&#11015; Full History', '&#11014; Full History')">
+        &#11015; Full History
+    </button>
+</div>
+
+<!-- PANEL 1 — STAGE FAILURE BREAKDOWN -->
+<div class="detail-panel" id="stagePanel">
+    <div class="build-wrap">
+        <div class="card">
+            <h2>Stage Failure Breakdown</h2>
+            <div class="stage-breakdown-grid" id="stageBreakdown"></div>
+        </div>
+    </div>
+    <!-- Stage perf bars -->
+    <div class="perf-card">
+        <h2>Pipeline Performance</h2>
+        <div class="perf-inline-grid">
+            <div class="perf-inline-item">
+                <div class="perf-inline-label"><span>Overall Success</span><span class="green">94.3%</span></div>
+                <div class="progress-track"><div class="progress-fill fill-green" style="width:94.3%"></div></div>
             </div>
-            <div id="foot2" class="foot_child">
-                <h3>Ai Disclaimer</h3>
-                <h3>Terms of Use</h3>
-                <h3>Trademarks</h3>
-                <h3>© Web Vit 2026</h3>
+            <div class="perf-inline-item">
+                <div class="perf-inline-label"><span>Build Pass Rate</span><span class="teal">97.2%</span></div>
+                <div class="progress-track"><div class="progress-fill fill-teal" style="width:97.2%"></div></div>
+            </div>
+            <div class="perf-inline-item">
+                <div class="perf-inline-label"><span>Test Pass Rate</span><span class="yellow">95.9%</span></div>
+                <div class="progress-track"><div class="progress-fill fill-yellow" style="width:95.9%"></div></div>
+            </div>
+            <div class="perf-inline-item">
+                <div class="perf-inline-label"><span>Deploy Success</span><span class="green">99.5%</span></div>
+                <div class="progress-track"><div class="progress-fill fill-green" style="width:99.5%"></div></div>
+            </div>
+            <div class="perf-inline-item">
+                <div class="perf-inline-label"><span>Security Pass</span><span class="teal">98.8%</span></div>
+                <div class="progress-track"><div class="progress-fill fill-teal" style="width:98.8%"></div></div>
             </div>
         </div>
-        <p class="feet"> © 2026 Web Dev. All rights reserved</p>
-    </footer>
+    </div>
+</div>
 
+<!-- PANEL 2 — RECENT PIPELINE RUNS (visual cards) -->
+<div class="detail-panel" id="runsPanel">
+    <div class="build-wrap">
+        <div class="card">
+            <h2>Recent Pipeline Runs</h2>
+            <div id="pipelineRuns"></div>
+        </div>
+    </div>
+</div>
+
+<!-- PANEL 3 — PIPELINE HISTORY TABLE -->
+<div class="detail-panel" id="historyPanel">
+    <div class="build-wrap">
+        <div class="card">
+            <h2>Pipeline History</h2>
+            <table class="build-table">
+                <thead>
+                    <tr>
+                        <th>Run</th>
+                        <th>Branch</th>
+                        <th>Status</th>
+                        <th>Duration</th>
+                        <th>Failed Stage</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<br><hr>
+
+<footer>
+    <div id="foot">
+        <div class="foot_child">
+            <h3>English (United States)</h3>
+            <h3>Your Privacy Choice</h3>
+        </div>
+        <div class="foot_child">
+            <h3>AI Disclaimer</h3>
+            <h3>Terms of Use</h3>
+            <h3>Trademarks</h3>
+            <h3>© Web Vit 2026</h3>
+        </div>
+    </div>
+    <p class="feet">© 2026 Web Dev. All rights reserved</p>
+</footer>
+
+<script src="pipeline.js"></script>
 </body>
-
 </html>
