@@ -42,7 +42,7 @@ CI-CD-Pipeline-DevOps-/
     ├── deploy.js           # Fetches and renders deployment data
     ├── health.js           # Fetches health data and renders alerts
     └── style.css           # Our custom dark theme stylesheet
-
+```
 ---
 
 ## Pages We Built and What Each One Does
