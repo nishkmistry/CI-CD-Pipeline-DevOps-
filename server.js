@@ -11,7 +11,7 @@ app.use(express.static('public'));
 
 app.use('/api/github', async (req, res) => {
     const targetUrl = `https://api.github.com${req.url}`;
-    const token = process.env.GITHUB_TOKEN;
+    const token = process.env.REACT_APP_GITHUB_TOKEN;
 
     if (!token) {
         return res.status(500).json({ error: 'GitHub PAT is not configured in the server .env file.' });
