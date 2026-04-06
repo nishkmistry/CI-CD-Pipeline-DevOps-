@@ -11,7 +11,7 @@ app.use(express.static('public'));
 
 app.use('/api/github', async (req, res) => {
     const targetUrl = `https://api.github.com${req.url}`;
-    const token = process.env.GITHUB_TOKEN;
+    const token = process.env.REACT_APP_GITHUB_TOKEN;
 
     if (!token) {
         return res.status(500).json({ error: 'GitHub PAT is not configured in the server .env file.' });
@@ -40,6 +40,10 @@ app.use('/api/github', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running at http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;

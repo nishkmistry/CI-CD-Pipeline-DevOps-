@@ -6,6 +6,13 @@ and system health — all in one place with charts and tables.
 
 ---
 
+# Deployment
+
+The website is deployed on Vercel -> [CI-CD-pipeline-Dev-Ops](https://ci-cd-pipeline-dev-ops.vercel.app/)
+
+
+---
+
 ## What We Built and Why
 
 We wanted to build something that actually shows what is happening inside a GitHub 
